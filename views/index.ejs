@@ -7,9 +7,9 @@
     <script src="/public/js/index.js" defer></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-
+    <aside class="rotation-chams-contatiner"></aside>
     <main class="main-container">
+      <h1><%= title %></h1>
       <label
         >닉네임 태그
         <select id="tag">
@@ -19,7 +19,6 @@
       <label> <input type="text" id="nickname" required /> </label>
       <button onclick="searchHandler()">검색</button>
     </main>
-    <aside class="rotation-chams-contatiner"></aside>
     <aside class="chat-contatiner"></aside>
   </body>
 </html>
