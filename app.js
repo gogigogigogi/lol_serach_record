@@ -3,11 +3,14 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const dotenv = require('dotenv');
+const axios = require('axios');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
+const lolRouter = require('./routes/lol');
 const app = express();
+dotenv.config();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -16,14 +19,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, '/public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/search', lolRouter);
 
 app.use((req, res, next) => {
-  console.log('env는', app.get('env'));
-  console.log('env는', process.env.NODE_ENV);
   next(createError(404, '찾을 수 없는 페이지입니다.'));
 });
 
