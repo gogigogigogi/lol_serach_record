@@ -22,7 +22,6 @@ async function searchHandler() {
       url: '/search/rotation',
       method: 'get',
     });
-    console.log('받은 로테이션 정보', result.data);
 
     const container = document.querySelector('.rotation-chams-contatiner');
     for (let i = 0; i < result.data.length; i++) {

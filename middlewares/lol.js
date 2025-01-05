@@ -13,7 +13,7 @@ exports.getUserPuuid = async (req, res, next) => {
         'ko,ko-KR;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
       'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
       Origin: 'http://localhost:3000',
-      'X-Riot-Token': 'RGAPI-8d27196d-8590-4fb2-baa0-36f78b940fc0',
+      'X-Riot-Token': process.env.DEV_API_Key,
     };
     const result = await axios({
       url: `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${nickname}/${tag}`,
@@ -63,7 +63,7 @@ exports.getRotationChams = async (req, res) => {
           'ko,ko-KR;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
         'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
         Origin: 'http://localhost:3000',
-        'X-Riot-Token': 'RGAPI-8d27196d-8590-4fb2-baa0-36f78b940fc0',
+        'X-Riot-Token': process.env.DEV_API_Key,
       },
     });
 
@@ -71,7 +71,9 @@ exports.getRotationChams = async (req, res) => {
     const rotationChamList = matchChamInfo(
       rotationChamInfoList.data.freeChampionIds
     );
-    console.log('필터한 챔프', rotationChamList.length);
+
     res.json(rotationChamList);
-  } catch (error) {}
+  } catch (error) {
+    console.log('에러는', error);
+  }
 };

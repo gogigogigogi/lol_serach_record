@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const indexRouter = require('../controller/index');
 
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'LOL 전적 검색' });
-});
+router.get('/', indexRouter.renderIndex);
 
 module.exports = router;
