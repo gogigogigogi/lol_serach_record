@@ -1,0 +1,27 @@
+body {
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+}
+
+.rotation-chams-contatiner {
+  border: 1px solid black;
+  width: 20%;
+  height: 60%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rotation-chams {
+  list-style: none;
+}
+
+.rotation-chams-img {
+  width: 60px;
+  height: 60px;
+}
+
+.rotation-chams-name {
+  font-weight: bold;
+  font-size: 13px;
+}

@@ -1,10 +1,10 @@
-const app = require('../app');
+const { server, app } = require('../app');
 const debug = require('debug')('price-trace:server');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-app.listen(app.get('port'), () => {
+server.listen(app.get('port'), () => {
   console.log(`http://localhost:${app.get('port')}`);
   debug('Listening on ');
 });
