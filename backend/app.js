@@ -5,6 +5,7 @@ const logger = require('morgan');
 const dotenv = require('dotenv');
 const { parseCookies } = require('./util/common');
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
 const http = require('http');
 const ws = require('ws');
 const app = express();
@@ -70,13 +71,27 @@ dotenv.config();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Headers', 'withCredentials');
+
+  next();
+});
+
+app.use((req, res, next) => {
+  const uuid = uuidv4();
+  res.cookie('clientId', uuid);
+  next();
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/search', lolRouter);
 
