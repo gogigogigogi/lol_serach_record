@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { getPuuid } from '../api/search';
 
 export const Search = () => {
   const [nickname, setNickname] = useState('');
@@ -16,17 +16,13 @@ export const Search = () => {
 
   async function searchHandler() {
     try {
-      const result = await axios({
-        url: 'http://localhost:8080/search',
-        method: 'get',
-        withCredentials: true,
-        params: {
-          nickname: nickname,
-          tag: tag,
-        },
-      });
+      const params = {
+        nickname,
+        tag,
+      };
+      const result = await getPuuid(params);
+      console.log('결과는 ', result);
       const { gameName, puuid, tagLine } = result.data;
-      console.log(result);
       setUserInfo({ gameName, puuid, tagLine });
     } catch (err) {
       console.log('에러', err);
