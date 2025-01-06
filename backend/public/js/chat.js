@@ -22,7 +22,7 @@ ws.onerror = (event) => {
 
 function addChatHandler() {
   const input = document.querySelector('.message-input');
-  if (input.value.trim() === 0) {
+  if (input.value.trim().length === 0) {
     alert('내용을 입력해주세요.');
     return;
   }

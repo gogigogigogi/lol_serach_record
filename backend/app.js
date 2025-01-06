@@ -26,10 +26,9 @@ wss.on('connection', (ws, req) => {
     return;
   }
 
-  // 각 클라이언트 ws객체를 객체에 저장 관리
+  // 각 클라이언트 ws객체를 map에 저장 관리
   // clients[cookieObj.clientId] = ws;
   clients.set(cookieObj.clientId, ws);
-  console.log('clients는', clients);
 
   // ip로 각 클라이언트 구분
   // const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -53,9 +52,12 @@ wss.on('connection', (ws, req) => {
   ws.on('close', (code, reason) => {
     console.log('종료 상태코드: ', code);
     console.log('종료 이유: ', reason);
-    // delete clients[cookieObj.clientId];
     clients.delete(cookieObj.clientId);
     console.log('연결된 클라이언트 갯수는 ', Object.keys(clients));
+  });
+
+  ws.on('error', (error) => {
+    console.log('웹소켓 에러', error);
   });
 });
 
