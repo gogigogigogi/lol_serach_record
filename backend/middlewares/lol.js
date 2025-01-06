@@ -4,7 +4,9 @@ const { matchChamInfo } = require('../util/lol');
 // https://asia.api.riotgames.com/
 exports.getUserPuuid = async (req, res, next) => {
   try {
+    console.log('api 실행');
     const { nickname, tag } = req.query;
+    console.log(nickname, tag);
     console.log(nickname, tag);
     const headers = {
       'User-Agent':
