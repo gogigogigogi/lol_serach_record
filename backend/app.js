@@ -39,7 +39,12 @@ wss.on('connection', (ws, req) => {
   console.log('연결된 클라이언트 갯수는 ', clients.size);
 
   // 각 클라이언트와 웹소켓 연결이 될 때
-  ws.send(JSON.stringify({ data: '채팅방이 열렸습니다.', author: 'admin' }));
+  ws.send(
+    JSON.stringify({
+      data: '채팅방이 열렸습니다.',
+      author: { sender: 'admin' },
+    })
+  );
 
   // 각 클라이언트에서 메세지가 올 때
   ws.on('message', (msg) => {

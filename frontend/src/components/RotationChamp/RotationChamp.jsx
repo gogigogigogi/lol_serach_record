@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getRotationChamp } from '../api';
+import { getRotationChamp } from '../../api';
 
 export const RotationChamp = () => {
   const [rotationChampList, setRotationChampList] = useState([]);
@@ -20,14 +20,13 @@ export const RotationChamp = () => {
 
   return (
     <div>
-      <div>RotationChamp</div>
+      <div>로테이션 챔피언</div>
       <ul>
         {rotationChampList.map((champion, idx) => {
           return (
             <li className='rotation-chams' key={idx}>
               <img
                 className='rotation-chams-img'
-                style={{ width: '40px', height: '40px' }}
                 src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${rotationChampList[idx].image.full}`}
               ></img>
               <div className='rotation-chams-name'>

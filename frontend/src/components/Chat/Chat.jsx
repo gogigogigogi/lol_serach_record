@@ -3,9 +3,18 @@ import { useEffect, useRef, useState } from 'react';
 export const Chat = () => {
   const wsRef = useRef(null);
   const myNick = useRef('');
+  const [input, setInput] = useState('');
   const [msgList, setMsgList] = useState([]);
 
-  function addChatHandler() {
+  const onChangeHandler = (e) => {
+    setInput(e.target.value);
+  };
+
+  const addChatHandler = (e) => {
+    console.log(e);
+    if (e.type === 'keydown' && e.key !== 'Enter') {
+      return;
+    }
     const input = document.querySelector('.message-input');
     console.log('마이닉은', myNick.current);
     if (input.value.trim().length === 0) {
@@ -18,7 +27,8 @@ export const Chat = () => {
         author: { nickname: myNick.current },
       })
     );
-  }
+    setInput('');
+  };
 
   useEffect(() => {
     myNick.current = document.cookie.split('=')[1].slice(0, 7);
@@ -45,14 +55,22 @@ export const Chat = () => {
     wsRef.current = ws;
   }, []);
   return (
-    <div>
+    <>
+      채팅방
       <div className='message-container'>
         <ul>
           {msgList.map((msg, idx) => {
             return (
-              <li key={idx}>
-                {msg.author === 'admin' ? null : (
-                  <span>{msg.author.nickname}</span>
+              <li
+                key={idx}
+                className={
+                  msg.author.sender === 'own' ? 'own-message' : 'other-message'
+                }
+              >
+                {msg.author.sender === 'admin' ? (
+                  <span>관리자{msg.author.nickname}: </span>
+                ) : (
+                  <span>유저{msg.author.nickname}: </span>
                 )}
                 <p>{msg.data}</p>
               </li>
@@ -60,16 +78,19 @@ export const Chat = () => {
           })}
         </ul>
       </div>
-      <div className='input-container'>
+      <div className='chat-input-container'>
         <input
           type='text'
           className='message-input'
           placeholder='채팅 내용을 입력해주세요.'
+          value={input}
+          onChange={(e) => onChangeHandler(e)}
+          onKeyDown={(e) => addChatHandler(e)}
         />
-        <button className='send-button' onClick={addChatHandler}>
+        <button className='send-button' onClick={(e) => addChatHandler(e)}>
           전송
         </button>
       </div>
-    </div>
+    </>
   );
 };
