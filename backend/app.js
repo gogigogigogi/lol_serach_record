@@ -12,9 +12,9 @@ const app = express();
 const server = http.createServer(app);
 const wss = new ws.Server({ server });
 
-// const clients = {};
 const clients = new Map();
 
+// 웹소켓 연결
 wss.on('connection', (ws, req) => {
   console.log('websocket connected');
 
@@ -39,13 +39,15 @@ wss.on('connection', (ws, req) => {
   console.log('연결된 클라이언트 갯수는 ', clients.size);
 
   // 각 클라이언트와 웹소켓 연결이 될 때
-  ws.send('hello, websocket connected!');
+  ws.send(JSON.stringify({ data: 'hello, websocket connected!' }));
 
   // 각 클라이언트에서 메세지가 올 때
   ws.on('message', (msg) => {
-    console.log(`각 클라이언트로 부터 받은 메세지는 : ${msg}`);
+    console.log('msg원본', msg);
+    const parsedMsg = JSON.parse(msg.toString());
+    console.log(`각 클라이언트로 부터 받은 메세지는 : `, parsedMsg);
     clients.forEach((client) => {
-      client.send(`${msg}`);
+      client.send(JSON.stringify(parsedMsg));
     });
   });
 
@@ -71,17 +73,11 @@ dotenv.config();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// cors 설정
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Headers', 'withCredentials');
-
-  next();
-});
-
-app.use((req, res, next) => {
-  const uuid = uuidv4();
-  res.cookie('clientId', uuid);
   next();
 });
 
@@ -90,6 +86,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, '/public')));
+
+app.use((req, res, next) => {
+  console.log('요청쿠키는', req.cookies);
+  if (req.cookies.clientId) {
+    return next();
+  } else {
+    const uuid = uuidv4();
+    res.cookie('clientId', uuid);
+    next();
+  }
+});
 
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);

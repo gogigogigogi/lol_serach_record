@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getPuuid } from '../api/search';
+import { getPuuid } from '../api';
 
 export const Search = () => {
   const [nickname, setNickname] = useState('');

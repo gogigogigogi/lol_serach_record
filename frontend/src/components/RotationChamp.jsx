@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getRotationChamp } from '../api/search';
+import { getRotationChamp } from '../api';
 
 export const RotationChamp = () => {
   const [rotationChampList, setRotationChampList] = useState([]);
