@@ -39,7 +39,7 @@ wss.on('connection', (ws, req) => {
   console.log('연결된 클라이언트 갯수는 ', clients.size);
 
   // 각 클라이언트와 웹소켓 연결이 될 때
-  ws.send(JSON.stringify({ data: 'hello, websocket connected!' }));
+  ws.send(JSON.stringify({ data: '채팅방이 열렸습니다.', author: 'admin' }));
 
   // 각 클라이언트에서 메세지가 올 때
   ws.on('message', (msg) => {
@@ -47,7 +47,8 @@ wss.on('connection', (ws, req) => {
     const parsedMsg = JSON.parse(msg.toString());
     console.log(`각 클라이언트로 부터 받은 메세지는 : `, parsedMsg);
     clients.forEach((client) => {
-      client.send(JSON.stringify(parsedMsg));
+      const sender = client === ws ? 'own' : 'other';
+      client.send(JSON.stringify({ ...parsedMsg, author: sender }));
     });
   });
 

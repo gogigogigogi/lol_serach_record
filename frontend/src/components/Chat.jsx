@@ -3,15 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 export const Chat = () => {
   const wsRef = useRef(null);
   const [msgList, setMsgList] = useState([]);
-  console.log(msgList);
   const userNickname = '유저' + document.cookie.split('=')[1].slice(0, 7);
+
   function addChatHandler() {
     const input = document.querySelector('.message-input');
     if (input.value.trim().length === 0) {
       alert('내용을 입력해주세요.');
       return;
     }
-    console.log('전송할 값은', input.value);
     wsRef.current.send(JSON.stringify({ data: input.value }));
   }
 
@@ -45,7 +44,7 @@ export const Chat = () => {
           {msgList.map((msg, idx) => {
             return (
               <li key={idx}>
-                <span>{userNickname}</span>
+                {msg.author === 'admin' ? null : <span>{userNickname}</span>}
                 <p>{msg.data}</p>
               </li>
             );
