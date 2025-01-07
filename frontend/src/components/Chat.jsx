@@ -2,19 +2,26 @@ import { useEffect, useRef, useState } from 'react';
 
 export const Chat = () => {
   const wsRef = useRef(null);
+  const myNick = useRef('');
   const [msgList, setMsgList] = useState([]);
-  const userNickname = '유저' + document.cookie.split('=')[1].slice(0, 7);
 
   function addChatHandler() {
     const input = document.querySelector('.message-input');
+    console.log('마이닉은', myNick.current);
     if (input.value.trim().length === 0) {
       alert('내용을 입력해주세요.');
       return;
     }
-    wsRef.current.send(JSON.stringify({ data: input.value }));
+    wsRef.current.send(
+      JSON.stringify({
+        data: input.value,
+        author: { nickname: myNick.current },
+      })
+    );
   }
 
   useEffect(() => {
+    myNick.current = document.cookie.split('=')[1].slice(0, 7);
     const ws = new WebSocket(import.meta.env.VITE_BACKEND_WS_URL);
     ws.onopen = (event) => {
       console.log('웹소켓 연결 완료', event);
@@ -44,7 +51,9 @@ export const Chat = () => {
           {msgList.map((msg, idx) => {
             return (
               <li key={idx}>
-                {msg.author === 'admin' ? null : <span>{userNickname}</span>}
+                {msg.author === 'admin' ? null : (
+                  <span>{msg.author.nickname}</span>
+                )}
                 <p>{msg.data}</p>
               </li>
             );

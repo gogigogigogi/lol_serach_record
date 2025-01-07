@@ -16,11 +16,9 @@ const clients = new Map();
 
 // 웹소켓 연결
 wss.on('connection', (ws, req) => {
-  console.log('websocket connected');
-
   // 쿠키 객체로 파싱
   const cookieObj = parseCookies(req.headers.cookie);
-
+  console.log('쿠키는', cookieObj);
   // 쿠키가 없으면 연결 종료
   if (!Object.keys(cookieObj).length) {
     ws.close();
@@ -28,8 +26,10 @@ wss.on('connection', (ws, req) => {
   }
 
   // 각 클라이언트 ws객체를 map에 저장 관리
-  // clients[cookieObj.clientId] = ws;
   clients.set(cookieObj.clientId, ws);
+
+  // ws객체에 닉네임 값 할당
+  ws.nickname = cookieObj.clientId.slice(0, 7);
 
   // ip로 각 클라이언트 구분
   // const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -43,12 +43,16 @@ wss.on('connection', (ws, req) => {
 
   // 각 클라이언트에서 메세지가 올 때
   ws.on('message', (msg) => {
-    console.log('msg원본', msg);
     const parsedMsg = JSON.parse(msg.toString());
     console.log(`각 클라이언트로 부터 받은 메세지는 : `, parsedMsg);
     clients.forEach((client) => {
-      const sender = client === ws ? 'own' : 'other';
-      client.send(JSON.stringify({ ...parsedMsg, author: sender }));
+      const sender = client.nickname === ws.nickname ? 'own' : 'other';
+      client.send(
+        JSON.stringify({
+          ...parsedMsg,
+          author: { nickname: parsedMsg.author.nickname, sender: sender },
+        })
+      );
     });
   });
 

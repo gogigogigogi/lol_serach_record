@@ -54,6 +54,7 @@ exports.addUserToDB = () => {
 
 // https://kr.api.riotgames.com/lol/platform/v3/champion-rotations
 exports.getRotationChams = async (req, res) => {
+  console.log(process.env.DEV_API_Key);
   try {
     const rotationChamInfoList = await axios({
       url: 'https://kr.api.riotgames.com/lol/platform/v3/champion-rotations',
