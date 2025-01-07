@@ -1,0 +1,132 @@
+@import url('../public/css/reset.css');
+body {
+  margin: 0;
+  padding: 20px;
+  height: 100%;
+}
+
+.app-container {
+  display: flex;
+  border: 1px solid black;
+  width: 100%;
+}
+.rotation-chams-container {
+  width: 10%;
+  height: 100vh;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid black;
+}
+
+.rotation-chams-container ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.rotation-chams-container li {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.rotation-chams-img {
+  width: 40px;
+  height: 40px;
+}
+
+.rotation-chams-name {
+  font-size: 13px;
+}
+
+.main-container {
+  width: 60%;
+  height: 100vh;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid black;
+}
+
+.search-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-container {
+  width: 30%;
+  height: 100vh;
+  padding: 10px;
+  background-color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  gap: 20px;
+}
+
+.message-container {
+  height: 65%;
+  overflow-y: auto;
+  border: 1px solid red;
+  padding: 7px;
+}
+
+.message-container ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.message-container li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.own-message {
+  align-self: flex-end;
+}
+.own-message > span {
+  font-weight: 500;
+  font-size: 18px;
+  background-color: skyblue;
+}
+.own-message > p {
+  font-weight: 450;
+  font-size: 16px;
+}
+
+.other-message {
+  align-self: flex-start;
+}
+
+.other-message > span {
+  font-weight: 500;
+  font-size: 18px;
+  background-color: wheat;
+}
+
+.chat-input-container {
+  align-self: flex-end;
+  display: flex;
+  width: 100%;
+}
+
+.chat-input-container > input.message-input {
+  flex-grow: 1;
+}
+.chat-input-container > button.send-button {
+  flex-grow: 0;
+}
