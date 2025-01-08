@@ -10,8 +10,49 @@ const http = require('http');
 const ws = require('ws');
 const app = express();
 const server = http.createServer(app);
-const wss = new ws.Server({ server });
 
+const usersRouter = require('./routes/users');
+const lolRouter = require('./routes/lol');
+
+dotenv.config();
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// cors 설정
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Headers', 'withCredentials');
+  next();
+});
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use('/public', express.static(path.join(__dirname, '/public')));
+
+const cookieConfig = {
+  path: '/',
+  expires: 1000 * 60,
+};
+app.use((req, res, next) => {
+  console.log('요청쿠키는', req.cookies);
+  if (req.cookies.clientId) {
+    return next();
+  } else {
+    const uuid = uuidv4();
+    res.cookie('clientId', uuid), cookieConfig;
+    next();
+  }
+});
+
+// app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/search', lolRouter);
+
+const wss = new ws.Server({ server });
 const clients = new Map();
 
 // 웹소켓 연결
@@ -20,7 +61,7 @@ wss.on('connection', (ws, req) => {
   const cookieObj = parseCookies(req.headers.cookie);
   console.log('쿠키는', cookieObj);
   // 쿠키가 없으면 연결 종료
-  if (!Object.keys(cookieObj).length) {
+  if (!cookieObj.clientId) {
     ws.close();
     return;
   }
@@ -74,44 +115,6 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const lolRouter = require('./routes/lol');
-
-dotenv.config();
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-// cors 설정
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Headers', 'withCredentials');
-  next();
-});
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use('/public', express.static(path.join(__dirname, '/public')));
-
-app.use((req, res, next) => {
-  console.log('요청쿠키는', req.cookies);
-  if (req.cookies.clientId) {
-    return next();
-  } else {
-    const uuid = uuidv4();
-    res.cookie('clientId', uuid);
-    next();
-  }
-});
-
-// app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/search', lolRouter);
-
 app.use((req, res, next) => {
   next(createError(404, '찾을 수 없는 페이지입니다.'));
 });
@@ -121,7 +124,7 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   res.status(err.status || 500);
-  res.render('error');
+  res.send('error');
 });
 
 module.exports = { server, app };

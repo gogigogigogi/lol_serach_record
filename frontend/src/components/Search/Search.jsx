@@ -31,7 +31,6 @@ export const Search = () => {
       console.log('에러', err);
     }
   }
-
   return (
     <div className='search-container'>
       <div className='input-container'>
