@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { getPuuid } from '../../api';
+import { getUserRecord } from '../../api';
 import { Record } from '../Record/Record';
 
 export const Search = () => {
   const [nickname, setNickname] = useState('');
   const [tag, setTag] = useState('KR1');
-  const [userInfo, setUserInfo] = useState(null);
-
+  const [records, setRecords] = useState({});
+  console.log(records);
   const nicknameChangeHandler = (e) => {
     setNickname(e.target.value);
   };
@@ -21,12 +21,9 @@ export const Search = () => {
         nickname,
         tag,
       };
-      const result = await getPuuid(params);
-      setUserInfo({
-        gameName: result.data.gameName,
-        puuid: result.data.puuid,
-        tagLine: result.data.tagLine,
-      });
+      const result = await getUserRecord(params);
+      setRecords(result.data);
+      console.log('결과는', result);
     } catch (err) {
       console.log('에러', err);
     }
@@ -52,7 +49,7 @@ export const Search = () => {
         </label>
         <button onClick={searchHandler}>검색</button>
       </div>
-      {userInfo && <Record userInfo={userInfo} />}
+      {Object.keys(records).length > 0 && <Record records={records} />}
     </div>
   );
 };

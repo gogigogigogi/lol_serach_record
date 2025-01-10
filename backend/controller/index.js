@@ -6,8 +6,9 @@ const { v4: uuidv4 } = require('uuid');
 //   path: '/',
 // };
 
-exports.renderIndex = (req, res, next) => {
+exports.setCookie = (req, res, next) => {
   const uuid = uuidv4();
+  console.log('ddd');
   res.cookie('clientId', uuid);
-  res.render('index', { title: 'LOL 전적 검색' });
+  res.end();
 };

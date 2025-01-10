@@ -13,6 +13,7 @@ const server = http.createServer(app);
 
 const usersRouter = require('./routes/users');
 const lolRouter = require('./routes/lol');
+const indexRouter = require('./routes/index');
 
 dotenv.config();
 
@@ -37,18 +38,18 @@ const cookieConfig = {
   path: '/',
   expires: 1000 * 60,
 };
-app.use((req, res, next) => {
-  console.log('요청쿠키는', req.cookies);
-  if (req.cookies.clientId) {
-    return next();
-  } else {
-    const uuid = uuidv4();
-    res.cookie('clientId', uuid), cookieConfig;
-    next();
-  }
-});
+// app.use('', (req, res, next) => {
+//   console.log('요청쿠키는', req.cookies);
+//   if (req.cookies.clientId) {
+//     return next();
+//   } else {
+//     const uuid = uuidv4();
+//     res.cookie('clientId', uuid), cookieConfig;
+//     next();
+//   }
+// });
 
-// app.use('/', indexRouter);
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/search', lolRouter);
 
