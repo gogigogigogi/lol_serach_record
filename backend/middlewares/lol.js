@@ -1,47 +1,73 @@
 const axios = require('axios');
-const { matchChamInfo } = require('../util/lol');
+const {
+  getUserPuuidApi,
+  getRotationChamIdsApi,
+  getMatchIdsApi,
+  getMatchInfoApi,
+} = require('../api/lol');
 
-// https://asia.api.riotgames.com/
+// 소환사 검색 - step1
 exports.getUserPuuid = async (req, res, next) => {
   try {
-    console.log('api 실행');
     const { nickname, tag } = req.query;
-    console.log(nickname, tag);
-    console.log(nickname, tag);
-    const headers = {
-      'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-      'Accept-Language':
-        'ko,ko-KR;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
-      'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
-      Origin: 'http://localhost:3000',
-      'X-Riot-Token': process.env.DEV_API_Key,
-    };
-    const result = await axios({
-      url: `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${nickname}/${tag}`,
-      method: 'get',
-      headers: headers,
-    });
-    console.log('결과는  ', result.data);
+    const result = await getUserPuuidApi(nickname, tag);
+
     // 얻은 puuid를 req객체에 저장
-    req.userInfo = {
-      gameName: result.data.gameName,
-      puuid: result.data.puuid,
-      tagLine: result.data.tagLine,
+    req.lolInfo = {
+      ...req.lolInfo,
+      user: {
+        gameName: result.data.gameName,
+        puuid: result.data.puuid,
+        tagLine: result.data.tagLine,
+      },
     };
-    res.json(result.data);
-    // next();
+    next();
+  } catch (err) {}
+};
+
+// 소환사 검색 - step2
+exports.getMatchIds = async (req, res, next) => {
+  try {
+    const matchIdList = await getMatchIdsApi(req.lolInfo.user.puuid);
+    console.log('매치아이디', matchIdList);
+    req.lolInfo = { ...req.lolInfo, matchIdList: matchIdList.data };
+    next();
+  } catch (err) {}
+};
+
+// 소환사 검색 - step3
+exports.getMatchInfos = async (req, res, next) => {
+  try {
+    const apis = req.lolInfo.matchIdList.map((matchId) => {
+      return getMatchInfoApi(matchId);
+    });
+
+    // 매치id 리스트를 promise all 로 동시 요청
+    const matchResults = await Promise.all(apis);
+    req.lolInfo = {
+      ...req.lolInfo,
+      matchResults: matchResults,
+    };
+    console.log('matchResults는', req.lolInfo);
+    next();
   } catch (err) {
-    if (err.response.status === 404) {
-      const error = new Error('정보를 찾을 수 없습니다.');
-      error.status = 404;
-      console.log('발생된 에러는 ', error);
-      res
-        .status(error.status)
-        .json({ isSuccess: false, message: error.message });
-    } else {
-      next(new Error('서버 에러 발생'));
-    }
+    console.log(err);
+  }
+};
+
+// 로테이션 챔피언 검색 step - 1
+exports.getRotationChamIds = async (req, res, next) => {
+  try {
+    const result = await getRotationChamIdsApi();
+
+    req.lolInfo = {
+      ...req.lolInfo,
+      rotationChamIds: result.data.freeChampionIds,
+    };
+
+    next();
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -50,33 +76,4 @@ exports.addUserToDB = () => {
   try {
     const { gameName, puuid, tagLine } = req.userInfo;
   } catch (error) {}
-};
-
-// https://kr.api.riotgames.com/lol/platform/v3/champion-rotations
-exports.getRotationChams = async (req, res) => {
-  console.log(process.env.DEV_API_Key);
-  try {
-    const rotationChamInfoList = await axios({
-      url: 'https://kr.api.riotgames.com/lol/platform/v3/champion-rotations',
-      method: 'get',
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        'Accept-Language':
-          'ko,ko-KR;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,zh;q=0.5',
-        'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
-        Origin: 'http://localhost:3000',
-        'X-Riot-Token': process.env.DEV_API_Key,
-      },
-    });
-
-    // 챔피온 key번호에 해당하는 챔피언 정보 가져오기
-    const rotationChamList = matchChamInfo(
-      rotationChamInfoList.data.freeChampionIds
-    );
-
-    res.json(rotationChamList);
-  } catch (error) {
-    console.log('에러는', error);
-  }
 };

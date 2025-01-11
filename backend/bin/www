@@ -1,5 +1,5 @@
 const { server, app } = require('../app');
-const debug = require('debug')('price-trace:server');
+const debug = require('debug')('lol-search-record:server');
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);

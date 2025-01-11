@@ -3,7 +3,7 @@ import axios from 'axios';
 // axios 공통 인스턴스 생성
 const searchInstance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_API_URL,
-  timeout: 2000,
+  timeout: 10000,
   withCredentials: true,
 });
 
