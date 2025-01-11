@@ -2,8 +2,8 @@ import { Chat } from './components/Chat/Chat';
 import { RotationChamp } from './components/RotationChamp/RotationChamp';
 import { Search } from './components/Search/Search';
 import { useEffect, useState } from 'react';
-import './App.css';
 import { getCookie } from './api';
+import './App.css';
 
 function App() {
   const [cookie, setCookie] = useState('');
@@ -21,7 +21,13 @@ function App() {
         console.log(error);
       }
     }
-    getCookieFunc();
+
+    // 쿠키가 없는 경우에만 쿠키 요청 보냄
+    if (document.cookie?.split('=')[1]) {
+      return;
+    } else {
+      getCookieFunc();
+    }
   }, []);
 
   return (

@@ -11,3 +11,22 @@ exports.matchChamInfo = (rotationChamIds) => {
     };
   });
 };
+
+exports.matchOwnRecord = (matchResults, user) => {
+  return matchResults.map((matchInfo) => {
+    const ownRecord = matchInfo.data.info.participants.find((participant) => {
+      return participant.summonerName === user.gameName;
+    });
+    return {
+      riotIdGameName: ownRecord.riotIdGameName,
+      riotIdTagline: ownRecord.riotIdTagline,
+      summonerLevel: ownRecord.summonerLevel,
+      win: ownRecord.win,
+      kills: ownRecord.kills,
+      deaths: ownRecord.deaths,
+      assists: ownRecord.assists,
+      position: ownRecord.individualPosition,
+      champion: ownRecord.championName,
+    };
+  });
+};

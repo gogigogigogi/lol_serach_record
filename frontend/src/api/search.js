@@ -1,7 +1,7 @@
 import { searchInstance } from './axiosInstance';
 
 const getCookie = () => {
-  return searchInstance.get('/set-cookie');
+  return searchInstance.get('/cookie/set');
 };
 
 const getUserRecord = (params) => {

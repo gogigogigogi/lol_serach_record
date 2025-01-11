@@ -187,6 +187,13 @@ body {
   line-height: 1.6;
 }
 
+.record-list.win {
+  background-color: rgb(66, 201, 238);
+}
+.record-list.lose {
+  background-color: rgb(207, 82, 78);
+}
+
 .record-list p {
   margin: 8px 0;
 }

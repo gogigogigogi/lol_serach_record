@@ -17,7 +17,10 @@ export const Record = ({ records }) => {
       <ul className='record-box'>
         {records.matchInfoList.map((record, idx) => {
           return (
-            <li key={idx} className='record-list'>
+            <li
+              key={idx}
+              className={`record-list ${record?.win ? 'win' : 'lose'}`}
+            >
               챔피언 : <p className='record-champion'>{record?.champion}</p>
               포지션 : <p className='record-position'>{record?.position}</p>
               KDA : <p className='record-kda'>{record?.win ? '승' : '패'}</p>

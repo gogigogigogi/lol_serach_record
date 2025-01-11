@@ -2,7 +2,8 @@ const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const dotenv = require('dotenv');
+require('dotenv').config();
+
 const { parseCookies } = require('./util/common');
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
@@ -10,12 +11,8 @@ const http = require('http');
 const ws = require('ws');
 const app = express();
 const server = http.createServer(app);
-
-const usersRouter = require('./routes/users');
 const lolRouter = require('./routes/lol');
-const indexRouter = require('./routes/index');
-
-dotenv.config();
+const cookieRouter = require('./routes/cookie');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -34,23 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
-const cookieConfig = {
-  path: '/',
-  expires: 1000 * 60,
-};
-// app.use('', (req, res, next) => {
-//   console.log('요청쿠키는', req.cookies);
-//   if (req.cookies.clientId) {
-//     return next();
-//   } else {
-//     const uuid = uuidv4();
-//     res.cookie('clientId', uuid), cookieConfig;
-//     next();
-//   }
-// });
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/cookie', cookieRouter);
 app.use('/search', lolRouter);
 
 const wss = new ws.Server({ server });
