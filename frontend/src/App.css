@@ -163,19 +163,19 @@ body {
   font-weight: bold;
 }
 
-/* 레코드 컨테이너 */
 .record-box {
-  display: flex; /* 가로 배치 */
-  flex-wrap: wrap; /* 화면이 좁아지면 다음 줄로 넘김 */
-  gap: 20px; /* 각 아이템 간격 */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 20px;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* 레코드 박스 */
 .record-list {
   flex: 1 1 300px; /* 최소 300px, 남은 공간은 균등 분배 */
+  flex-direction: column;
   max-width: 350px; /* 최대 너비 */
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -202,4 +202,9 @@ body {
 .record-list .record-position,
 .record-list .record-kda {
   font-weight: bold;
+}
+
+.item-list-box {
+  display: flex;
+  gap: 5px;
 }
