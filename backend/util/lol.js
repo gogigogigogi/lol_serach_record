@@ -9,8 +9,10 @@ exports.matchChamInfo = (rotationChamIds) => {
     const matchedChampion = championsInfoArr.find((champion) => {
       return +champion[1].key === championId;
     });
+    console.log('matchedChampion', matchedChampion);
     return {
-      ...matchedChampion[1],
+      name: matchedChampion[1].name,
+      image: `${process.env.CHAMPION_SQUARE_IMG_URL}/${matchedChampion[1].image.full}`,
     };
   });
 };

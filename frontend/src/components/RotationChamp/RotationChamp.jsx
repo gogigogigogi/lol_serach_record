@@ -24,10 +24,7 @@ export const RotationChamp = () => {
         {rotationChampList.map((champion, idx) => {
           return (
             <li className='rotation-chams' key={idx}>
-              <img
-                className='rotation-chams-img'
-                src={`https://ddragon.leagueoflegends.com/cdn/14.24.1/img/champion/${champion.image.full}`}
-              ></img>
+              <img className='rotation-chams-img' src={champion.image}></img>
               <div className='rotation-chams-name'>{champion.name}</div>
             </li>
           );
