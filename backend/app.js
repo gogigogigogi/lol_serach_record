@@ -36,6 +36,8 @@ app.use('/search', lolRouter);
 
 const wss = new ws.Server({ server });
 const clients = new Map();
+// const items = require('./util/items.json');
+// console.log('아이템 갯수는', Object.keys(items.data).length);
 
 // 웹소켓 연결
 wss.on('connection', (ws, req) => {

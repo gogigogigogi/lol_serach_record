@@ -3,52 +3,74 @@ import { getUserRecord } from '../../api';
 import { Record } from '../Record/Record';
 
 export const Search = () => {
-  const [nickname, setNickname] = useState('');
-  const [tag, setTag] = useState('KR1');
+  const [searchInput, setSearchInput] = useState({
+    nickname: '',
+    tag: 'KR1',
+  });
   const [records, setRecords] = useState({});
-  console.log(records);
-  const nicknameChangeHandler = (e) => {
-    setNickname(e.target.value);
-  };
 
-  const tagChangeHandler = (e) => {
-    setTag(e.target.value);
-  };
-
-  async function searchHandler() {
-    try {
-      const params = {
-        nickname,
-        tag,
+  const onChangeHandler = (e, type) => {
+    setSearchInput((prevState) => {
+      return {
+        ...prevState,
+        [type]: e.target.value,
       };
+    });
+  };
+
+  async function searchHandler(e) {
+    try {
+      e.preventDefault();
+
+      const params = {
+        nickname: searchInput.nickname,
+        tag: searchInput.tag,
+      };
+
       const result = await getUserRecord(params);
       setRecords(result.data);
-      console.log('결과는', result);
+      setSearchInput({ nickname: '', tag: 'KR1' });
     } catch (err) {
       console.log('에러', err);
     }
   }
   return (
     <div className='search-container'>
-      <div className='input-container'>
+      <form className='input-container'>
         <label>
           태그
-          <select id='tag' value={tag} onChange={(e) => tagChangeHandler(e)}>
-            <option value='KR1'>한국</option>
+          <select id='tag-select' onChange={(e) => onChangeHandler(e, 'tag')}>
+            <option value='KR1' selected>
+              한국
+            </option>
+            <option value='JP1'>일본</option>
+            <option value='NA1'>미국</option>
           </select>
         </label>
+
+        <input
+          type='text'
+          id='tag'
+          value={searchInput.tag}
+          onChange={(e) => onChangeHandler(e, 'tag')}
+          required
+          style={{
+            width: '50px',
+          }}
+        />
+
         <label>
           닉네임
           <input
             type='text'
             id='nickname'
-            value={nickname}
-            onChange={(e) => nicknameChangeHandler(e)}
+            value={searchInput.nickname}
+            onChange={(e) => onChangeHandler(e, 'nickname')}
             required
           />
         </label>
         <button onClick={searchHandler}>검색</button>
-      </div>
+      </form>
       {Object.keys(records).length > 0 && <Record records={records} />}
     </div>
   );

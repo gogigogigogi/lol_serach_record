@@ -1,0 +1,110 @@
+{
+  "400": {
+    "queueId": 400,
+    "map": "Summoner's Rift",
+    "description": "일반",
+    "notes": null
+  },
+
+  "420": {
+    "queueId": 420,
+    "map": "Summoner's Rift",
+    "description": "솔로랭크",
+    "notes": null
+  },
+  "430": {
+    "queueId": 430,
+    "map": "Summoner's Rift",
+    "description": "일반",
+    "notes": null
+  },
+  "440": {
+    "queueId": 440,
+    "map": "Summoner's Rift",
+    "description": "자유랭크",
+    "notes": null
+  },
+  "450": {
+    "queueId": 450,
+    "map": "Howling Abyss",
+    "description": "칼바람",
+    "notes": null
+  },
+
+  "700": {
+    "queueId": 700,
+    "map": "Summoner's Rift",
+    "description": "격전",
+    "notes": null
+  },
+
+  "870": {
+    "queueId": 870,
+    "map": "Summoner's Rift",
+    "description": "입문 Bot",
+    "notes": null
+  },
+  "880": {
+    "queueId": 880,
+    "map": "Summoner's Rift",
+    "description": "초보 Bot",
+    "notes": null
+  },
+  "890": {
+    "queueId": 890,
+    "map": "Summoner's Rift",
+    "description": "중급 Bot",
+    "notes": null
+  },
+  "900": {
+    "queueId": 900,
+    "map": "Summoner's Rift",
+    "description": "우르프",
+    "notes": null
+  },
+
+  "920": {
+    "queueId": 920,
+    "map": "Howling Abyss",
+    "description": "포로왕",
+    "notes": null
+  },
+
+  "1020": {
+    "queueId": 1020,
+    "map": "Summoner's Rift",
+    "description": "단일",
+    "notes": null
+  },
+
+  "1300": {
+    "queueId": 1300,
+    "map": "Nexus Blitz",
+    "description": "돌격넥서스",
+    "notes": null
+  },
+  "1400": {
+    "queueId": 1400,
+    "map": "Summoner's Rift",
+    "description": "궁주문서",
+    "notes": null
+  },
+  "2000": {
+    "queueId": 2000,
+    "map": "Summoner's Rift",
+    "description": "튜토리얼",
+    "notes": null
+  },
+  "2010": {
+    "queueId": 2010,
+    "map": "Summoner's Rift",
+    "description": "튜토리얼",
+    "notes": null
+  },
+  "2020": {
+    "queueId": 2020,
+    "map": "Summoner's Rift",
+    "description": "튜토리얼",
+    "notes": null
+  }
+}

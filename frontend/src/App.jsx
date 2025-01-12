@@ -7,15 +7,13 @@ import './App.css';
 
 function App() {
   const [cookie, setCookie] = useState('');
-  const setCookieHandler = (cookie) => {
-    setCookie(cookie);
-  };
 
   useEffect(() => {
+    let cookie = document.cookie?.split('=')[1];
     async function getCookieFunc() {
       try {
         await getCookie();
-        const cookie = document.cookie?.split('=')[1];
+        cookie = document.cookie?.split('=')[1];
         setCookie(cookie);
       } catch (error) {
         console.log(error);
@@ -23,7 +21,8 @@ function App() {
     }
 
     // 쿠키가 없는 경우에만 쿠키 요청 보냄
-    if (document.cookie?.split('=')[1]) {
+    if (cookie) {
+      setCookie(cookie);
       return;
     } else {
       getCookieFunc();
@@ -33,7 +32,7 @@ function App() {
   return (
     <div className='app-container'>
       <aside className='rotation-chams-container'>
-        <RotationChamp setCookieHandler={setCookieHandler} />
+        <RotationChamp />
       </aside>
       <main className='main-container'>
         <Search />

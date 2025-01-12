@@ -1,6 +1,4 @@
-const axios = require('axios');
 const { matchChamInfo, matchOwnRecord } = require('../util/lol');
-const { getMatchInfoApi } = require('../api/lol');
 
 // 로테이션 챔피언 검색 step - 2
 exports.getRotationChampInfos = (req, res, next) => {
@@ -18,8 +16,7 @@ exports.getOwnMatchInfos = async (req, res, next) => {
       req.lolInfo.matchResults,
       req.lolInfo.user
     );
-    console.log('asd길이는', matchInfoList.length);
-    console.log('asd길이는', matchInfoList[0]);
+    console.log('matchInfoList는', matchInfoList);
     res.json({
       userInfo: {
         riotIdGameName: matchInfoList[0].riotIdGameName,
